@@ -1,0 +1,82 @@
+15. Design and Develop MongoDB Queries using CRUD operations. 
+
+mongosh
+show dbs;
+use mydb;
+
+db.createCollection('employee');
+
+show collections;
+
+db.employee.insertOne({name:"Pranav K",age:30,email:"pk@gmail.com"});
+
+db.employee.find();
+
+db.employee.insertMany([{ name: "Vedant gorule", age: 32, email: "dv@gmail.com" }, { name: "Shreeyash Garde", age: 32, email: "sg@gmail.com" }])
+
+
+db.employee.find();
+
+db.employee.find({age:30});
+
+db.employee.updateOne( {name:"Pranav K"}, {$set:{email:'pnk@gmail.com'}});
+
+db.employee.findOne({name:"Pranav K"});
+
+db.employee.deleteOne({email:"pnk@gmail.com"});
+
+db.employee.findOne({name:"Pranav K"});
+
+db.employee.find();
+
+QUESTION 17]
+
+Design and Develop MongoDB Queries using aggregation function with suitable example using MongoDB
+
+CODE :
+
+show dbs
+use customer
+db.cust_table.insert({Item_id:1,Cust_Name:"Ram",Product:"Milk",Amount:40});
+db.cust_table.insert({Item_id:2,Cust_Name:"Ram",Product:"Parle_G",Amount:50});
+db.cust_table.insert({Item_id:3,Cust_Name:"Mohan",Product:"Lays Chips",Amount:40});
+db.cust_table.insert({Item_id:4,Cust_Name:"Shivam",Product:"Mentos",Amount:10});
+db.cust_table.insert({Item_id:5,Cust_Name:"Mohan",Product:"Maggie",Amount:60});
+db.cust_table.aggregate({$group:{_id:"$Cust_Name","total":{$sum:"$Amount"}}});
+db.cust_table.aggregate({$group:{_id:"$Cust_Name","total":{$avg:"$Amount"}}});
+db.cust_table.aggregate({$group:{_id:"$Cust_Name","total":{$min:"$Amount"}}});
+db.cust_table.aggregate({$group:{_id:"$Cust_Name","total":{$max:"$Amount"}}});
+db.cust_table.aggregate({$group:{_id:"$Cust_Name","total":{$first:"$Amount"}}});
+db.cust_table.aggregate({$group:{_id:"$Cust_Name","total":{$last:"$Amount"}}});
+db.cust_table.aggregate({$group:{_id:"$Cust_Name","total":{$push:"$Amount"}}});
+db.cust_table.aggregate({$group:{_id:"$Cust_Name","total":{$sum:1}}});
+db.cust_table.aggregate({$group:{_id:"$Cust_Name","total":{$addToSet:"$Amount"}}});
+db.cust_table.createIndex({'Item_id':1})
+db.cust_table.createIndex({'Item_id':2})
+db.cust_table.createIndex({'Item_id':4})
+db.cust_table.getIndexes()
+db.cust_table.dropIndex({'Item_id':4})
+db.cust_table.dropIndex({'Item_id':1})
+db.cust_table.getIndexes()
+db.cust_table.getIndexes()
+
+QUESTION 19]
+
+Implement Map reduces operation with suitable example using MongoDB. 
+
+CODE :
+
+show dbs
+use bill
+db.pay.insert({Cust_ID:"A123",Product:"Milk",Amount:40,Status:"P"});
+db.pay.insert({Cust_ID:"A123",Product:"Parle_G",Amount:50,Status:"NP"});
+db.pay.insert({Cust_ID:"A123",Product:"Lays Chips",Amount:40,Status:"P"});
+db.pay.insert({Cust_ID:"B123",Product:"Mentos",Amount:10,Status:"P"});
+db.pay.insert({Cust_ID:"B123",Product:"Maggie",Amount:60,Status:"NP"});
+db.pay.find()
+db.pay.mapReduce(function(){emit(this.Cust_ID,this.Amount);},function(key,values){return Array.sum(values)},{query:{"Status":"NP"},out:"Bill_Amount"})
+var mapFunc1=function(){emit(this.Cust_ID,this.Amount);};
+var reduceFunc1=function(keyCustID,valuePrices){return Array.sum(valuePrices);};
+db.pay.mapReduce(mapFunc1,reduceFunc1,{out:"Map"})
+db.Bill_Amount.find()
+db.Map.find()
